@@ -38,8 +38,8 @@ public abstract class Creature extends Entity {
         return null;
     }
 
-    public void goToNearestEntity(Map map, String entityID) {
-        var path = getPathFinder().findPathToNearestEntity(map, entityID, coordinates);
+    public <T extends Entity> void goToNearestEntity(Map map, Class<T> entityType) {
+        var path = getPathFinder().findPathToNearestEntity(map, entityType, coordinates);
         if (path == null) return;
 
         var pathIterator = path.iterator();

@@ -3,6 +3,7 @@ package src.entities.creatures;
 import src.Coordinates;
 import src.Map;
 import src.entities.Entity;
+import src.entities.resources.Grass;
 
 
 public class Herbivore extends Creature {
@@ -22,7 +23,7 @@ public class Herbivore extends Creature {
             return;
         }
 
-        goToNearestEntity(map, "grass");
+        goToNearestEntity(map, Grass.class);
     }
 
     private void eatFood(Map map, Entity foodEntity) {

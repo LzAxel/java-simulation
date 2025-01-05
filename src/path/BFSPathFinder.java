@@ -2,11 +2,12 @@ package src.path;
 
 import src.Coordinates;
 import src.Map;
+import src.entities.Entity;
 
 import java.util.*;
 
 public class BFSPathFinder implements PathFinder {
-    public Collection<Coordinates> findPathToNearestEntity(Map map, String entityID, Coordinates startPosition) {
+    public <T extends Entity> Collection<Coordinates> findPathToNearestEntity(Map map, Class<T> entityType, Coordinates startPosition) {
         Queue<Coordinates> queue = new LinkedList<>();
         queue.add(startPosition);
 
@@ -23,10 +24,10 @@ public class BFSPathFinder implements PathFinder {
         while (!queue.isEmpty()) {
             var currentPosition = queue.remove();
 
-            nearestFoodCoordinates = processMoves(map, queue, distances, pathHistory, currentPosition, primaryMoves, entityID);
+            nearestFoodCoordinates = findCoordinatesToMove(map, queue, distances, pathHistory, currentPosition, primaryMoves, entityType);
             if (nearestFoodCoordinates != null) break;
 
-            nearestFoodCoordinates = processMoves(map, queue, distances, pathHistory, currentPosition, diagonalMoves, entityID);
+            nearestFoodCoordinates = findCoordinatesToMove(map, queue, distances, pathHistory, currentPosition, diagonalMoves, entityType);
             if (nearestFoodCoordinates != null) break;
         }
 
@@ -48,9 +49,9 @@ public class BFSPathFinder implements PathFinder {
     }
 
 
-    private Coordinates processMoves(Map map, Queue<Coordinates> queue,
+    private <T extends Entity> Coordinates findCoordinatesToMove(Map map, Queue<Coordinates> queue,
                                      Hashtable<Coordinates, Integer> distances, Hashtable<Coordinates, Coordinates> pathHistory,
-                                     Coordinates currentPosition, int[][] moves, String entityID) {
+                                     Coordinates currentPosition, int[][] moves, Class<T> entityType) {
         for (int[] move : moves) {
             var moveCoordinates = new Coordinates(currentPosition.x() + move[0], currentPosition.y() + move[1]);
 
@@ -64,7 +65,7 @@ public class BFSPathFinder implements PathFinder {
 
             var currentEntity = map.getEntity(moveCoordinates);
             if (currentEntity != null) {
-                if (!Objects.equals(currentEntity.getID(), entityID)) {
+                if (!Objects.equals(currentEntity.getClass(), entityType)) {
                     continue;
                 }
             }
@@ -73,7 +74,7 @@ public class BFSPathFinder implements PathFinder {
             distances.put(moveCoordinates, distances.get(currentPosition) + 1);
             pathHistory.put(moveCoordinates, currentPosition);
 
-            if (currentEntity != null && Objects.equals(currentEntity.getID(), entityID)) {
+            if (currentEntity != null && Objects.equals(currentEntity.getClass(), entityType)) {
                 return moveCoordinates;
             }
         }

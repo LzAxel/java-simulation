@@ -23,7 +23,7 @@ public class Predator extends Creature {
             return;
         }
 
-        goToNearestEntity(map, "herbivore");
+        goToNearestEntity(map, Herbivore.class);
     }
 
     public void attackHerbivore(Map map, Herbivore herbivore) {
