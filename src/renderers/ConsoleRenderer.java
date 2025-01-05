@@ -34,6 +34,6 @@ public class ConsoleRenderer implements Renderer {
 
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        System.out.println(frame + String.format("\nP: %d, C: %d, F: %d", map.countEntities(Predator.class), map.countEntities(Herbivore.class), map.countEntities(Grass.class)));
+        System.out.println(frame + String.format("\nPredators: %d, Herbivores: %d, Grass: %d", map.countEntities(Predator.class), map.countEntities(Herbivore.class), map.countEntities(Grass.class)));
     }
 }
